@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Game</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">Score: 0</div>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDiv = document.getElementById('score');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 30,
+            width: 30,
+            height: 30,
+            dx: 0,
+            speed: 5,
+        };
+
+        const obstacles = [];
+        let score = 0;
+        let gameOver = false;
+
+        function drawPlayer() {
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        function drawObstacles() {
+            ctx.fillStyle = 'red';
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+        }
+
+        function updatePlayer() {
+            player.x += player.dx;
+
+            // Wall detection
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+        }
+
+        function updateObstacles() {
+            obstacles.forEach((obstacle, index) => {
+                obstacle.y += obstacle.speed;
+
+                // Remove obstacles that have passed the bottom
+                if (obstacle.y > canvas.height) {
+                    obstacles.splice(index, 1);
+                    score++;
+                    scoreDiv.textContent = `Score: ${score}`;
+                }
+
+                // Collision detection
+                if (
+                    player.x < obstacle.x + obstacle.width &&
+                    player.x + player.width > obstacle.x &&
+                    player.y < obstacle.y + obstacle.height &&
+                    player.height + player.y > obstacle.y
+                ) {
+                    gameOver = true;
+                }
+            });
+
+            // Add new obstacles
+            if (Math.random() < 0.02) {
+                obstacles.push({
+                    x: Math.random() * (canvas.width - 30),
+                    y: -30,
+                    width: 30,
+                    height: 30,
+                    speed: 3 + Math.random() * 2,
+                });
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+            drawObstacles();
+        }
+
+        function update() {
+            updatePlayer();
+            updateObstacles();
+        }
+
+        function loop() {
+            if (!gameOver) {
+                draw();
+                update();
+                requestAnimationFrame(loop);
+            } else {
+                ctx.fillStyle = 'white';
+                ctx.font = '48px serif';
+                ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
+            }
+        }
+
+        function moveRight() {
+            player.dx = player.speed;
+        }
+
+        function moveLeft() {
+            player.dx = -player.speed;
+        }
+
+        function stopMove() {
+            player.dx = 0;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'd') moveRight();
+            if (e.key === 'ArrowLeft' || e.key === 'a') moveLeft();
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'd' || e.key === 'a') stopMove();
+        });
+
+        loop();
+    </script>
+</body>
+</html>
