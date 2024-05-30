@@ -3,146 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Game</title>
+    <title>Clicker Game</title>
     <style>
         body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            overflow: hidden;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-        canvas {
-            display: block;
+        #game-container {
+            text-align: center;
         }
-        #score {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 20px;
-            color: white;
+        #clicker-img {
+            width: 300px;
+            height: auto;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        #clicker-img:active {
+            transform: scale(0.95);
+        }
+        #counter {
+            font-size: 24px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <div id="score">Score: 0</div>
-    <canvas id="gameCanvas"></canvas>
+    <div id="game-container">
+        <img id="clicker-img" src="https://img-s.wfolio.com/x/Sjpgrm2v20FR6Cth5viRkzL_0dyRc0yk/9ZAr53SKb35Qfl1d5e6G5AqIciSqSaBm/4UGutC19saw3rL_Q7UI1fg-zCJbZPk2j/gcp_SF_eDuelvcFvJkeKa93YEMNXel54/eynZKVq5NXPhw0gg90PSBQ.jpg" alt="Clicker Image">
+        <div id="counter">Clicks: 0</div>
+    </div>
+
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreDiv = document.getElementById('score');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        const clickerImg = document.getElementById('clicker-img');
+        const counterDiv = document.getElementById('counter');
+        let count = 0;
 
-        const player = {
-            x: canvas.width / 2,
-            y: canvas.height - 30,
-            width: 30,
-            height: 30,
-            dx: 0,
-            speed: 5,
-        };
-
-        const obstacles = [];
-        let score = 0;
-        let gameOver = false;
-
-        function drawPlayer() {
-            ctx.fillStyle = 'blue';
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-        }
-
-        function drawObstacles() {
-            ctx.fillStyle = 'red';
-            obstacles.forEach(obstacle => {
-                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
-            });
-        }
-
-        function updatePlayer() {
-            player.x += player.dx;
-
-            // Wall detection
-            if (player.x < 0) player.x = 0;
-            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-        }
-
-        function updateObstacles() {
-            obstacles.forEach((obstacle, index) => {
-                obstacle.y += obstacle.speed;
-
-                // Remove obstacles that have passed the bottom
-                if (obstacle.y > canvas.height) {
-                    obstacles.splice(index, 1);
-                    score++;
-                    scoreDiv.textContent = `Score: ${score}`;
-                }
-
-                // Collision detection
-                if (
-                    player.x < obstacle.x + obstacle.width &&
-                    player.x + player.width > obstacle.x &&
-                    player.y < obstacle.y + obstacle.height &&
-                    player.height + player.y > obstacle.y
-                ) {
-                    gameOver = true;
-                }
-            });
-
-            // Add new obstacles
-            if (Math.random() < 0.02) {
-                obstacles.push({
-                    x: Math.random() * (canvas.width - 30),
-                    y: -30,
-                    width: 30,
-                    height: 30,
-                    speed: 3 + Math.random() * 2,
-                });
-            }
-        }
-
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            drawPlayer();
-            drawObstacles();
-        }
-
-        function update() {
-            updatePlayer();
-            updateObstacles();
-        }
-
-        function loop() {
-            if (!gameOver) {
-                draw();
-                update();
-                requestAnimationFrame(loop);
-            } else {
-                ctx.fillStyle = 'white';
-                ctx.font = '48px serif';
-                ctx.fillText('Game Over', canvas.width / 2 - 100, canvas.height / 2);
-            }
-        }
-
-        function moveRight() {
-            player.dx = player.speed;
-        }
-
-        function moveLeft() {
-            player.dx = -player.speed;
-        }
-
-        function stopMove() {
-            player.dx = 0;
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === 'd') moveRight();
-            if (e.key === 'ArrowLeft' || e.key === 'a') moveLeft();
+        clickerImg.addEventListener('click', () => {
+            count++;
+            counterDiv.textContent = `Clicks: ${count}`;
         });
-
-        document.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft' || e.key === 'd' || e.key === 'a') stopMove();
-        });
-
-        loop();
     </script>
 </body>
 </html>
