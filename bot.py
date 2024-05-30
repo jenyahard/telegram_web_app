@@ -14,7 +14,7 @@ bot_token = '6758909655:AAFuHmzMBqrc7_B6OiuwidkAcfgGqeSkp3o'
 bot = telebot.TeleBot(bot_token)
 
 # Укажите ваш локальный IP-адрес
-local_ip = 'http://192.168.1.49:8550'
+local_ip = 'https://github.com/jenyahard/telegram_web_app/blob/main/templates/index.html'
 
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
