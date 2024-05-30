@@ -14,12 +14,12 @@ bot_token = '6758909655:AAFuHmzMBqrc7_B6OiuwidkAcfgGqeSkp3o'
 bot = telebot.TeleBot(bot_token)
 
 # Укажите ваш локальный IP-адрес
-local_ip = 'https://github.com/jenyahard/telegram_web_app/blob/main/templates/index.html'
+local_ip = 'https://jenyahard.github.io/telegram_web_app/'
 
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Привет! Нажмите кнопку ниже, чтобы открыть веб-приложение.")
+    bot.reply_to(message, "Привет! Нажмите кнопку /webapp чтобы перейти в веб приложение.")
 
 # Обработчик команды /webapp
 @bot.message_handler(commands=['webapp'])
