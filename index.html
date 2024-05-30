@@ -1,12 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Салам пополам</title>
 </head>
 <body>
     <h1>Салам пополам!</h1>
+    <button onclick="sendDataToBot()">Отправить данные в бот</button>
+
+    <script>
+        function sendDataToBot() {
+            // Пример данных, которые вы хотите отправить
+            const data = "Пример данных";
+            // Отправка данных в бот
+            Telegram.WebApp.sendData(data);
+        }
+        Telegram.WebApp.onEvent('mainButtonClicked', function() {
+            sendDataToBot();
+        });
+    </script>
     <p>Это страницы из gitlab и вот мое первое веб приложение епта.</p>
     <p>
         <a href="https://jenyahard.github.io/telegram_web_app/game.html">Сыграем в игру?</a>
