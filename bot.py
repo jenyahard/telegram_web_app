@@ -1,8 +1,5 @@
-# Замените значения YOUR_BOT_TOKEN на ваш токен бота
 import telebot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo, CallbackQuery
-
-
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 
 # Замените значения YOUR_BOT_TOKEN на ваш токен бота
 bot_token = '6758909655:AAFuHmzMBqrc7_B6OiuwidkAcfgGqeSkp3o'
@@ -22,16 +19,14 @@ def send_welcome(message):
     markup.add(web_app_button)
     bot.send_message(message.chat.id, "Нажмите кнопку ниже, чтобы открыть WebApp.", reply_markup=markup)
 
-# Обработчик callback_query
-@bot.callback_query_handler(func=lambda call: True)
-def handle_callback(call: CallbackQuery):
-    data = call.data  # данные, полученные из веб-приложения
-    bot.send_message(call.message.chat.id, f"Получены данные из WebApp: {data}")
-
+# Обработчик для получения данных из WebApp
+@bot.message_handler(content_types=['web_app_data'])
+def handle_web_app_data(message):
+    data = message.web_app_data.data  # данные, полученные из веб-приложения
+    bot.send_message(message.chat.id, f"Получены данные из WebApp: {data}")
 
 def run_bot():
     bot.polling()
-
 
 if __name__ == '__main__':
     # Запуск бота
