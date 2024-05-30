@@ -3,50 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Game</title>
+    <title>Hamster Kombat</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        .container {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            flex-direction: column;
         }
-        #game-container {
-            text-align: center;
+        .health-bar {
+            width: 200px;
+            height: 20px;
+            background-color: #ddd;
+            margin: 10px;
+            border: 1px solid #000;
         }
-        #clicker-img {
-            width: 300px;
-            height: auto;
-            cursor: pointer;
-            transition: transform 0.1s;
+        .health {
+            height: 100%;
+            background-color: #4caf50;
         }
-        #clicker-img:active {
-            transform: scale(0.95);
-        }
-        #counter {
-            font-size: 24px;
+        .buttons {
             margin-top: 20px;
+        }
+        .hamster {
+            font-size: 50px;
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <img id="clicker-img" src="https://img-s.wfolio.com/x/Sjpgrm2v20FR6Cth5viRkzL_0dyRc0yk/9ZAr53SKb35Qfl1d5e6G5AqIciSqSaBm/4UGutC19saw3rL_Q7UI1fg-zCJbZPk2j/gcp_SF_eDuelvcFvJkeKa93YEMNXel54/eynZKVq5NXPhw0gg90PSBQ.jpg" alt="Clicker Image">
-        <div id="counter">Clicks: 0</div>
+    <div class="container">
+        <h1>Hamster Kombat</h1>
+        <div id="hamster1" class="hamster">🐹</div>
+        <div id="health-bar1" class="health-bar">
+            <div id="health1" class="health" style="width: 100%;"></div>
+        </div>
+        <div id="hamster2" class="hamster">🐹</div>
+        <div id="health-bar2" class="health-bar">
+            <div id="health2" class="health" style="width: 100%;"></div>
+        </div>
+        <div class="buttons">
+            <button onclick="attack(1)">Attack Hamster 2</button>
+            <button onclick="attack(2)">Attack Hamster 1</button>
+        </div>
+        <div id="message"></div>
     </div>
 
     <script>
-        const clickerImg = document.getElementById('clicker-img');
-        const counterDiv = document.getElementById('counter');
-        let count = 0;
+        let health1 = 100;
+        let health2 = 100;
 
-        clickerImg.addEventListener('click', () => {
-            count++;
-            counterDiv.textContent = `Clicks: ${count}`;
-        });
+        function attack(hamster) {
+            if (hamster === 1) {
+                health2 -= Math.floor(Math.random() * 20) + 1;
+                if (health2 < 0) health2 = 0;
+                document.getElementById('health2').style.width = health2 + '%';
+            } else {
+                health1 -= Math.floor(Math.random() * 20) + 1;
+                if (health1 < 0) health1 = 0;
+                document.getElementById('health1').style.width = health1 + '%';
+            }
+
+            if (health1 === 0) {
+                document.getElementById('message').innerText = 'Hamster 2 wins!';
+                disableButtons();
+            } else if (health2 === 0) {
+                document.getElementById('message').innerText = 'Hamster 1 wins!';
+                disableButtons();
+            }
+        }
+
+        function disableButtons() {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => button.disabled = true);
+        }
     </script>
 </body>
 </html>

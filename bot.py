@@ -1,5 +1,5 @@
 import telebot
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo, ReplyKeyboardMarkup
 
 # Замените значения YOUR_BOT_TOKEN на ваш токен бота
 bot_token = '6758909655:AAFuHmzMBqrc7_B6OiuwidkAcfgGqeSkp3o'
@@ -11,7 +11,7 @@ local_ip = 'https://jenyahard.github.io/telegram_web_app/'
 # Обработчик команды /start
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    markup = InlineKeyboardMarkup()
+    markup = ReplyKeyboardMarkup()
     web_app_button = InlineKeyboardButton(
         text="Открыть WebApp",
         web_app=WebAppInfo(url=local_ip)
@@ -23,6 +23,7 @@ def send_welcome(message):
 @bot.message_handler(content_types=['web_app_data'])
 def handle_web_app_data(message):
     data = message.web_app_data.data  # данные, полученные из веб-приложения
+    print('Данные получены')
     bot.send_message(message.chat.id, f"Получены данные из WebApp: {data}")
 
 def run_bot():
