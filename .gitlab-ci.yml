@@ -3,8 +3,8 @@ image: alpine:latest
 pages:
   stage: deploy
   script:
-    - mkdir .templates
-    - cp -r templates/* .templates
+    - mkdir public
+    - cp -r templates/* public
   artifacts:
     paths:
-      - .templates
+      - public
